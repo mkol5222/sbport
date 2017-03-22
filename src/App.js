@@ -13,7 +13,7 @@ const Dropzone = require('react-dropzone');
 
 import { investigateFile } from "./sbapi";
 
-var Inspector = require('react-json-inspector');
+import ReactJsonSyntaxHighlighter from 'react-json-syntax-highlighter'
 
 class App extends Component {
 
@@ -80,9 +80,7 @@ class App extends Component {
 
         </Row>
         <div>
-        {this.state.files.length > 1
-              ? <Inspector data={ this.state } />
-              : null }
+          <ReactJsonSyntaxHighlighter obj={this.state} />
         </div>
 
       </div>

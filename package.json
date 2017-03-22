@@ -18,8 +18,10 @@
     "react-bootstrap": "^0.30.8",
     "react-dom": "^15.4.2",
     "react-dropzone": "^3.12.2",
+    "react-highlight": "^0.9.0",
     "react-json-inspector": "^7.0.0",
     "react-json-pretty": "^1.5.0",
+    "react-json-syntax-highlighter": "^0.1.15",
     "react-json-tree": "^0.10.7",
     "redux": "^3.6.0"
   },

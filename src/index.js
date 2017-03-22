@@ -4,6 +4,10 @@ import App from './App';
 import './index.css';
 import '../node_modules/bootstrap/dist/css/bootstrap.min.css';
 
+import {sbDownload} from "./sbapi.js";
+
+sbDownload("f754cb42-2679-4aaf-adf9-c61cf090488b");
+
 ReactDOM.render(
   <App />,
   document.getElementById('root')
