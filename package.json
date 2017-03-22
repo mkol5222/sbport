@@ -1,0 +1,32 @@
+{
+  "name": "sbport",
+  "main": "build/index.html",
+  "window": {
+    "toolbar": true
+  },
+  "homepage": ".",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "axios": "^0.15.3",
+    "bootstrap": "^3.3.7",
+    "install-nw": "^1.1.5",
+    "nw": "^0.21.3",
+    "react": "^15.4.2",
+    "react-bootstrap": "^0.30.8",
+    "react-dom": "^15.4.2",
+    "react-dropzone": "^3.12.2"
+  },
+  "devDependencies": {
+    "react-scripts": "0.9.5"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  },
+  "webkit": {
+    "plugin": true
+  }
+}
