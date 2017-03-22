@@ -13,6 +13,8 @@ const Dropzone = require('react-dropzone');
 
 import { investigateFile } from "./sbapi";
 
+var Inspector = require('react-json-inspector');
+
 class App extends Component {
 
   state = {
@@ -38,19 +40,12 @@ class App extends Component {
         </Navbar.Header>
         <Navbar.Collapse>
           <Nav>
-            <NavItem eventKey={1} href="#">Link</NavItem>
-            <NavItem eventKey={2} href="#">Link</NavItem>
-            <NavDropdown eventKey={3} title="Dropdown" id="basic-nav-dropdown">
-              <MenuItem eventKey={3.1}>Action</MenuItem>
-              <MenuItem eventKey={3.2}>Another action</MenuItem>
-              <MenuItem eventKey={3.3}>Something else here</MenuItem>
-              <MenuItem divider/>
-              <MenuItem eventKey={3.3}>Separated link</MenuItem>
-            </NavDropdown>
+            <NavItem eventKey={1} href="http://blog.checkpoint.com/tag/sandblast-agent-forensics/">SBA Forensics</NavItem>
+            <NavItem eventKey={2} href="https://threatmap.checkpoint.com/ThreatPortal/livemap.html">Threat Map</NavItem>
           </Nav>
           <Nav pullRight>
-            <NavItem eventKey={1} href="#">Link Right</NavItem>
-            <NavItem eventKey={2} href="#">Link Right</NavItem>
+            <NavItem eventKey={1} href="https://www.threat-cloud.com/ThreatPortal/#/">Threat Portal</NavItem>
+            <NavItem eventKey={2} href="https://threatwiki.checkpoint.com/threatwiki/public.htm">Threat Wiki</NavItem>
           </Nav>
         </Navbar.Collapse>
       </Navbar>
@@ -71,7 +66,7 @@ class App extends Component {
           <Col md={8}>
             {this.state.files.length > 0
               ? <div>
-                  <h2>Uploading {this.state.files.length}
+                  <h2>Investigating {this.state.files.length}
                     files...</h2>
                   <div>{this
                       .state
@@ -84,6 +79,11 @@ class App extends Component {
           <Col md={1}/>
 
         </Row>
+        <div>
+        {this.state.files.length > 1
+              ? <Inspector data={ this.state } />
+              : null }
+        </div>
 
       </div>
     );

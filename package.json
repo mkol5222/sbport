@@ -11,11 +11,17 @@
     "axios": "^0.15.3",
     "bootstrap": "^3.3.7",
     "install-nw": "^1.1.5",
+    "js-md5": "^0.4.2",
+    "js-sha1": "^0.4.1",
     "nw": "^0.21.3",
     "react": "^15.4.2",
     "react-bootstrap": "^0.30.8",
     "react-dom": "^15.4.2",
-    "react-dropzone": "^3.12.2"
+    "react-dropzone": "^3.12.2",
+    "react-json-inspector": "^7.0.0",
+    "react-json-pretty": "^1.5.0",
+    "react-json-tree": "^0.10.7",
+    "redux": "^3.6.0"
   },
   "devDependencies": {
     "react-scripts": "0.9.5"
