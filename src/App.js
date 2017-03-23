@@ -32,9 +32,15 @@ class App extends Component {
 
  constructor(props) {
     super(props);
+    this.lastFileID = 0;
     this.store=createStore(reducers, applyMiddleware(ReduxPromise, asyncDispatchMiddleware));
     // applyMiddleware(ReduxPromise)(
     console.log(this.store.getState());
+  }
+
+  getNewFileID = () => {
+    this.lastFileID++;
+    return this.lastFileID;
   }
 
   onDrop = (acceptedFiles, rejectedFiles) => {
@@ -44,11 +50,12 @@ class App extends Component {
     acceptedFiles.forEach((file) => {
       //investigateFile(file);
       // add to list
-      this.store.dispatch({type: ADD_FILE, payload: file});
+      const newFileID = this.getNewFileID();
+      this.store.dispatch({type: ADD_FILE, payload: { id: newFileID, file: file} });
       // query cloud
       //this.store.dispatch(queryFile(file));
       // load and calculate hashes
-      this.store.dispatch(loadFile(file));
+      //this.store.dispatch(loadFile({ id: newFileID, file: file}));
     });
   }
 

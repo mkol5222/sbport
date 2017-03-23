@@ -1,6 +1,6 @@
 import axios from 'axios';
 import {
-  QUERY_FILE, LOAD_FILE, UPLOAD_FILE
+  QUERY_FILE, LOAD_FILE, FILE_LOADED, UPLOAD_FILE
 } from './types';
 
 import { API_KEY, fileExt } from '../sbapi';
@@ -8,6 +8,13 @@ import { API_KEY, fileExt } from '../sbapi';
 export function loadFile(file) {
     return {
         type: LOAD_FILE,
+        payload: file
+    };
+}
+
+export function fileLoaded(file) {
+    return {
+        type: FILE_LOADED,
         payload: file
     };
 }
