@@ -17,7 +17,7 @@ class FileList extends Component {
         <div>MD5 {file.fileMD5}</div>
         <div>SHA1 {file.fileSHA1}</div>
         <div>Verdict {file.verdict}</div>
-
+        <div>{file.statusText}</div>
       </li>
     );
     return null;
@@ -38,7 +38,7 @@ class FileList extends Component {
   render() {
       console.log("filelist props", this.props);
     return (
-      <ul className="list-group col-sm-4">
+      <ul className="list-group col-sm-8">
         {this.renderList()}
       </ul>
     );

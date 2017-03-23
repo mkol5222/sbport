@@ -1,9 +1,21 @@
 import axios from 'axios';
 import {
-  QUERY_FILE, LOAD_FILE, FILE_LOADED, UPLOAD_FILE
+  QUERY_FILE, LOAD_FILE, FILE_LOADED, UPLOAD_FILE, UPDATE_FILE_STATUS
 } from './types';
 
 import { API_KEY, fileExt } from '../sbapi';
+
+export function updateFileStatus(sha1, statusText, verdict="uknonwn")
+{
+    return {
+        type: UPDATE_FILE_STATUS,
+        payload: {
+            sha1: sha1,
+            statusText: statusText,
+            verdict: verdict
+        }
+    };    
+}
 
 export function loadFile(file) {
     return {
@@ -27,10 +39,10 @@ export function queryFile(file) {
 
     const request = axios.post("/tecloud/api/v1/file/query", {
         request: {
-            md5: file.MD5,
-            sha1: file.SHA1,
-            file_name: file.name,
-            file_type: fileExt(file.name),
+            md5: file.fileMD5,
+            sha1: file.fileSHA1,
+            file_name: file.fileName,
+            file_type: fileExt(file.fileName),
             features: [
                 "te", "av"
             ],
@@ -54,10 +66,10 @@ export function uploadFile(file) {
     
     var reqJSON = {
         request: {
-            md5: file.MD5,
-            sha1: file.SHA1,
-            file_name: file.name,
-            file_type: fileExt(file.name),
+            md5: file.fileMD5,
+            sha1: file.fileSHA1,
+            file_name: file.fileName,
+            file_type: fileExt(file.fileName),
             features: [
                 "te", "av"
             ],
@@ -69,7 +81,7 @@ export function uploadFile(file) {
     var reqJSONString = JSON.stringify(reqJSON);
     var data = new FormData;
     data.append("request", reqJSONString);
-    data.append("file", new Blob([file.contentArrayBuffer], {type: "application/octet-stream"}));
+    data.append("file", new Blob([file.file.contentArrayBuffer], {type: "application/octet-stream"}));
 
     const request = axios.post("/tecloud/api/v1/file/upload", data);
 

@@ -1,7 +1,14 @@
 //import _ from 'lodash';
-import {ADD_FILE, QUERY_FILE, LOAD_FILE, FILE_LOADED, UPLOAD_FILE} from '../actions/types';
+import {
+    ADD_FILE,
+    QUERY_FILE,
+    LOAD_FILE,
+    FILE_LOADED,
+    UPLOAD_FILE,
+    UPDATE_FILE_STATUS
+} from '../actions/types';
 
-import {queryFile, uploadFile, fileLoaded, loadFile} from '../actions';
+import {queryFile, uploadFile, fileLoaded, loadFile, updateFileStatus} from '../actions';
 
 var sha1 = require('js-sha1');
 var md5 = require('js-md5');
@@ -9,10 +16,10 @@ var md5 = require('js-md5');
 var dotProp = require('dot-prop-immutable');
 
 function fileBySHA1(state, hash) {
-    console.log("fileBySHA1", state, hash);
+    //console.log("fileBySHA1", state, hash);
     return state.find((v, i, o) => {
-        console.log("find", v, i, o);
-        return v.file.SHA1 === hash;
+        //console.log("find", v, i, o);
+        return v.fileSHA1 === hash;
     });
 }
 
@@ -35,11 +42,17 @@ function reviewQueryOrUploadStatus(state, action) {
                 case 1003:
                 case 1002:
                     // 1003 = PENDING , 1002 = UPLOAD_SUCCESS
-                    if (file !== undefined) 
+                    if (file !== undefined) {
+                        var activity="checked";
+                        if (resp.te.status.code == 1002) activity="uploaded";
+                        
+                        action.asyncDispatch(updateFileStatus(resp.sha1, `file ${activity} ${new Date().toString()}`));
                         setTimeout(() => action.asyncDispatch(queryFile(file)), 30000);
+                    }
                     break;
                 case 1001: //FOUND
                 case 1006: //PARTIALLY_FOUND
+                    action.asyncDispatch(updateFileStatus(resp.sha1, `file found ${new Date().toString()}`, resp.te.combined_verdict));
                     console.log("found");
                     break;
             }
@@ -69,11 +82,15 @@ export default function (state = [], action) {
                 fileType: action.payload.file.type,
                 fileLastModifiedDate: action.payload.file.lastModifiedDate,
                 verdict: "unknown",
-                avVerdict: "unknown"
+                avVerdict: "unknown",
+                statusText: `file added ${new Date().toString()}`
             }
-            var newState = [...state, newFile];
+            var newState = [
+                ...state,
+                newFile
+            ];
             console.log("newState", newState);
-            action.asyncDispatch( loadFile(newFile) );
+            action.asyncDispatch(loadFile(newFile));
             return newState;
 
         case LOAD_FILE:
@@ -93,7 +110,7 @@ export default function (state = [], action) {
             }
 
             loadFileUsingFileReader(action.payload.file, () => {
-                action.asyncDispatch( fileLoaded(action.payload) );
+                action.asyncDispatch(fileLoaded(action.payload));
             });
             return state;
 
@@ -102,7 +119,7 @@ export default function (state = [], action) {
 
             var fileUpdatedAfterLoaded = Object.assign({}, action.payload, {
                 fileMD5: action.payload.file.MD5,
-                fileSHA1: action.payload.file.SHA1,
+                fileSHA1: action.payload.file.SHA1
             });
             console.log("fileUpdatedAfterLoaded", fileUpdatedAfterLoaded);
 
@@ -113,10 +130,34 @@ export default function (state = [], action) {
                 }
                 return listedFile;
             });
+            action.asyncDispatch(queryFile(fileUpdatedAfterLoaded));
             console.log("FILE_LOADED after  state update", newStateAfterLoaded);
-            
-            action.asyncDispatch(queryFile(fileUpdatedAfterLoaded.file));
             return newStateAfterLoaded;
+            break;
+
+        case UPDATE_FILE_STATUS:
+            console.log("UPDATE_FILE_STATUS", state, action)
+
+            const fileForStatusUpdate = fileBySHA1(state, action.payload.sha1);
+            if (fileForStatusUpdate !== undefined) {
+                var fileUpdatedWithStatus = Object.assign({}, fileForStatusUpdate, {
+                    statusText: action.payload.statusText,
+                    verdict: action.payload.verdict
+                });
+                console.log("fileUpdatedWithStatus", fileUpdatedWithStatus);
+
+                var newStateAfterStatusUpdate = state.map((listedFile) => {
+                    console.log("state update", listedFile, fileForStatusUpdate.id);
+                    if (listedFile.id === fileForStatusUpdate.id) {
+                        return fileUpdatedWithStatus;
+                    }
+                    return listedFile;
+                });
+                console.log("UPDATE_FILE_STATUS after  state update", newStateAfterStatusUpdate);
+
+                return newStateAfterStatusUpdate;
+            }
+            return state;
             break;
 
         case QUERY_FILE:
