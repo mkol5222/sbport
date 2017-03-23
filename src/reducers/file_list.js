@@ -52,7 +52,7 @@ function reviewQueryOrUploadStatus(state, action) {
                     break;
                 case 1001: //FOUND
                 case 1006: //PARTIALLY_FOUND
-                    action.asyncDispatch(updateFileStatus(resp.sha1, `file found ${new Date().toString()}`, resp.te.combined_verdict));
+                    action.asyncDispatch(updateFileStatus(resp.sha1, `file found ${new Date().toString()}`, resp.te.combined_verdict, resp));
                     console.log("found");
                     break;
             }
@@ -138,11 +138,14 @@ export default function (state = [], action) {
         case UPDATE_FILE_STATUS:
             console.log("UPDATE_FILE_STATUS", state, action)
 
+            console.log("Server API response: ", action.payload.apiResponse);
+
             const fileForStatusUpdate = fileBySHA1(state, action.payload.sha1);
             if (fileForStatusUpdate !== undefined) {
                 var fileUpdatedWithStatus = Object.assign({}, fileForStatusUpdate, {
                     statusText: action.payload.statusText,
-                    verdict: action.payload.verdict
+                    verdict: action.payload.verdict,
+                    apiResponse: action.payload.apiResponse
                 });
                 console.log("fileUpdatedWithStatus", fileUpdatedWithStatus);
 

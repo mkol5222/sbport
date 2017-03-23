@@ -5,14 +5,17 @@ import {
 
 import { API_KEY, fileExt } from '../sbapi';
 
-export function updateFileStatus(sha1, statusText, verdict="uknonwn")
+
+
+export function updateFileStatus(sha1, statusText, verdict="unknown", apiResponse = null)
 {
     return {
         type: UPDATE_FILE_STATUS,
         payload: {
             sha1: sha1,
             statusText: statusText,
-            verdict: verdict
+            verdict: verdict,
+            apiResponse: apiResponse
         }
     };    
 }
@@ -47,7 +50,7 @@ export function queryFile(file) {
                 "te", "av"
             ],
                 te: {
-                    reports: ["xml", "pdf"]
+                    reports: ["pdf", "xml", "tar", "full_report"]
                 }
             }
         });
@@ -74,7 +77,7 @@ export function uploadFile(file) {
                 "te", "av"
             ],
             te: {
-                reports: ["xml", "pdf"]
+                reports: ["pdf", "xml", "tar", "full_report"]
             }
         }
     };
