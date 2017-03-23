@@ -2,6 +2,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 
+import   { Label } from 'react-bootstrap';
+
 class FileList extends Component {
   componentWillMount() {
     //this.props.fetchBooks();
@@ -17,6 +19,8 @@ class FileList extends Component {
         <div>MD5 {file.fileMD5}</div>
         <div>SHA1 {file.fileSHA1}</div>
         <div>Verdict {file.verdict}</div>
+        {file.verdict === "benign" ? <Label bsStyle="success">Benign</Label> : null}
+        {file.verdict === "malicious" ? <Label bsStyle="danger">Malicious</Label> : null}
         <div>{file.statusText}</div>
       </li>
     );
