@@ -3,8 +3,6 @@ import './App.css';
 import {
   Navbar,
   Nav,
-  NavDropdown,
-  MenuItem,
   NavItem,
   Row,
   Col
@@ -12,9 +10,9 @@ import {
 const Dropzone = require('react-dropzone');
 
 //import { investigateFile } from "./sbapi";
-import {queryFile, loadFile} from './actions';
+//import {queryFile, loadFile} from './actions';
 
-import ReactJsonSyntaxHighlighter from 'react-json-syntax-highlighter'
+//import ReactJsonSyntaxHighlighter from 'react-json-syntax-highlighter'
 
 import { createStore, applyMiddleware } from 'redux';
 import reducers from './reducers';

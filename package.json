@@ -4,7 +4,8 @@
   "window": {
     "toolbar": true,
     "width": 1200,
-    "height": 500
+    "height": 600,
+    "position": "center"
   },
   "homepage": ".",
   "version": "0.1.0",

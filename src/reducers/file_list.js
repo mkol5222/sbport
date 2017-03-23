@@ -13,7 +13,7 @@ import {queryFile, uploadFile, fileLoaded, loadFile, updateFileStatus} from '../
 var sha1 = require('js-sha1');
 var md5 = require('js-md5');
 
-var dotProp = require('dot-prop-immutable');
+//var dotProp = require('dot-prop-immutable');
 
 function fileBySHA1(state, hash) {
     //console.log("fileBySHA1", state, hash);
@@ -43,10 +43,11 @@ function reviewQueryOrUploadStatus(state, action) {
                 case 1002:
                     // 1003 = PENDING , 1002 = UPLOAD_SUCCESS
                     if (file !== undefined) {
-                        var activity="checked";
-                        if (resp.te.status.code == 1002) activity="uploaded";
+                        var activity = "checked";
+                        if (resp.te.status.code === 1002) 
+                            activity = "uploaded";
                         
-                        action.asyncDispatch(updateFileStatus(resp.sha1, `file ${activity} ${new Date().toString()}`));
+                        action.asyncDispatch(updateFileStatus(resp.sha1, `file ${activity} ${new Date().toString()}`, resp.te.combined_verdict, resp));
                         setTimeout(() => action.asyncDispatch(queryFile(file)), 30000);
                     }
                     break;
@@ -55,6 +56,9 @@ function reviewQueryOrUploadStatus(state, action) {
                     action.asyncDispatch(updateFileStatus(resp.sha1, `file found ${new Date().toString()}`, resp.te.combined_verdict, resp));
                     console.log("found");
                     break;
+                default:
+                    return state;
+
             }
 
         }
@@ -133,11 +137,9 @@ export default function (state = [], action) {
             action.asyncDispatch(queryFile(fileUpdatedAfterLoaded));
             console.log("FILE_LOADED after  state update", newStateAfterLoaded);
             return newStateAfterLoaded;
-            break;
 
         case UPDATE_FILE_STATUS:
-            console.log("UPDATE_FILE_STATUS", state, action)
-
+            console.log("UPDATE_FILE_STATUS", state, action);
             console.log("Server API response: ", action.payload.apiResponse);
 
             const fileForStatusUpdate = fileBySHA1(state, action.payload.sha1);
@@ -161,7 +163,6 @@ export default function (state = [], action) {
                 return newStateAfterStatusUpdate;
             }
             return state;
-            break;
 
         case QUERY_FILE:
             console.log(action.type, "with payload", action.payload);
@@ -170,6 +171,7 @@ export default function (state = [], action) {
             console.log(action.type, "with payload", action.payload);
             return reviewQueryOrUploadStatus(state, action);
 
+        default:
+            return state;
     }
-    return state;
 }

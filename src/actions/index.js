@@ -82,7 +82,7 @@ export function uploadFile(file) {
         }
     };
     var reqJSONString = JSON.stringify(reqJSON);
-    var data = new FormData;
+    var data = new FormData();
     data.append("request", reqJSONString);
     data.append("file", new Blob([file.file.contentArrayBuffer], {type: "application/octet-stream"}));
 

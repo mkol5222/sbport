@@ -7,29 +7,19 @@ import FileIcon from 'react-icons/lib/fa/file-o';
 import FileIconPDF from 'react-icons/lib/fa/file-pdf-o';
 import FileIconXML from 'react-icons/lib/fa/file-code-o';
 
-import {ObjectInspector, TableInspector} from 'react-inspector';
+import {ObjectInspector} from 'react-inspector';
 
 import {
     ChasingDots,
-    Circle,
-    CubeGrid,
-    DoubleBounce,
-    FadingCircle,
-    FoldingCube,
-    Pulse,
-    RotatingPlane,
-    ThreeBounce,
-    WanderingCubes,
-    Wave
 } from 'better-react-spinkit'
 
 import axios from 'axios';
 import {API_KEY} from '../sbapi';
 
 var filesize = require('filesize');
-console.log("IMPORT filesize", filesize, filesize(10004343));
 
-import {ListGroup, ListGroupItem, ButtonGroup, Button} from 'react-bootstrap';
+
+import {ListGroup, ListGroupItem} from 'react-bootstrap';
 import {
     Card,
     CardHeader,
@@ -41,7 +31,6 @@ import {
 
 var downloadjs = require("downloadjs");
 
-console.log("BootCards: ", Card, CardHeader, CardTitle, ListGroup, ListGroupItem, ListGroupItemHeader, ListGroupItemText);
 
 class FileList extends Component {
 
@@ -180,7 +169,7 @@ class FileList extends Component {
     render() {
         console.log("filelist props", this.props);
         return (
-            <ul className="list-group col-sm-8">
+            <ul className="list-group col-sm-10">
                 {this.renderList()}
             </ul >
         );
