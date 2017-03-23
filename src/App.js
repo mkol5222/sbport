@@ -11,21 +11,45 @@ import {
 } from 'react-bootstrap';
 const Dropzone = require('react-dropzone');
 
-import { investigateFile } from "./sbapi";
+//import { investigateFile } from "./sbapi";
+import {queryFile, loadFile} from './actions';
 
 import ReactJsonSyntaxHighlighter from 'react-json-syntax-highlighter'
 
+import { createStore, applyMiddleware } from 'redux';
+import reducers from './reducers';
+import ReduxPromise from 'redux-promise';
+
+import { ADD_FILE } from './actions/types';
+
+import FileList from './containers/FileList';
+
+import {asyncDispatchMiddleware} from './middleware/asyncdispatch';
+
+console.log("FileList", FileList);
+
 class App extends Component {
 
-  state = {
-    files: []
+ constructor(props) {
+    super(props);
+    this.store=createStore(reducers, applyMiddleware(ReduxPromise, asyncDispatchMiddleware));
+    // applyMiddleware(ReduxPromise)(
+    console.log(this.store.getState());
   }
 
   onDrop = (acceptedFiles, rejectedFiles) => {
     console.log('Accepted files: ', acceptedFiles);
     console.log('Rejected files: ', rejectedFiles);
-    this.setState({files: acceptedFiles});
-    acceptedFiles.forEach((file) => {investigateFile(file);});
+    //this.setState({files: [...this.state.files, ...acceptedFiles]});
+    acceptedFiles.forEach((file) => {
+      //investigateFile(file);
+      // add to list
+      this.store.dispatch({type: ADD_FILE, payload: file});
+      // query cloud
+      //this.store.dispatch(queryFile(file));
+      // load and calculate hashes
+      this.store.dispatch(loadFile(file));
+    });
   }
 
   render() {
@@ -62,26 +86,16 @@ class App extends Component {
               Drop files or click to upload
             </Dropzone>
           </Col>
-
+         
           <Col md={8}>
-            {this.state.files.length > 0
-              ? <div>
-                  <h2>Investigating {this.state.files.length}
-                    files...</h2>
-                  <div>{this
-                      .state
-                      .files
-                      .map((file) => <img key={file.name} src={file.preview} alt={file.name}></img>)}</div>
-                </div>
-              : null}
+            <FileList store={this.store}/>
           </Col>
 
           <Col md={1}/>
 
         </Row>
-        <div>
-          <ReactJsonSyntaxHighlighter obj={this.state} />
-        </div>
+
+                
 
       </div>
     );

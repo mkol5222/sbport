@@ -3,7 +3,7 @@ import axios from 'axios';
 var sha1 = require('js-sha1');
 var md5 = require('js-md5');
 
-const API_KEY = "TE_API_KEY_ZNmsk6rQwmCQkhP73swGcKkbmLq3gUi9UG7jTa4D";
+export const API_KEY = "TE_API_KEY_ZNmsk6rQwmCQkhP73swGcKkbmLq3gUi9UG7jTa4D";
 
 export function fileExt(fileName) {
     return fileName.substr(fileName.lastIndexOf('.') + 1);
@@ -122,11 +122,12 @@ export function sbQuota() {
 
 export function sbDownload(downloadID) {
     if (downloadID === undefined) return undefined;
-    
+
     // https://te.checkpoint.com/tecloud/api/v1/file/download?id="
     axios.defaults.baseURL = 'https://te.checkpoint.com';
     axios.defaults.headers.common['Authorization'] = API_KEY;
-    axios.defaults.headers.post['Content-Type'] = 'application/json';
+    axios.defaults.headers.common["Cache-Control"] = "no-cache";
+    //axios.defaults.headers.post['Content-Type'] = 'application/json';
     //axios.defaults.responseType = 'arraybuffer';
 
     axios
@@ -144,6 +145,7 @@ export function sbDownload(downloadID) {
             alert(error);
         });
 }
+
 
 export function investigateFile(file) {
     sbQuota();
