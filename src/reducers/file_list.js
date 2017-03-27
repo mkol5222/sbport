@@ -7,7 +7,7 @@ import {
     UPLOAD_FILE,
     UPDATE_FILE_STATUS
 } from '../actions/types';
-
+ 
 import {queryFile, uploadFile, fileLoaded, loadFile, updateFileStatus} from '../actions';
 
 var sha1 = require('js-sha1');

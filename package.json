@@ -49,5 +49,8 @@
   },
   "webkit": {
     "plugin": true
+  },
+  "eslintConfig": {
+    "extends": "react-app"
   }
 }
